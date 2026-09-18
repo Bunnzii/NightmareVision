@@ -92,7 +92,7 @@ class FunkinAssets
 		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(key)) data = File.getContent(key);
 		else #end if (Assets.exists(key)) data = Assets.getText(key);
 		
-		if (data != null && useCache) cache.cacheData(key, data);
+		if (data != null) { if (useCache) cache.cacheData(key, data);}
 		else throw 'Couldnt find file at path [$key]';
 		
 		return data;
