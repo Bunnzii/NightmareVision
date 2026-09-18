@@ -79,7 +79,7 @@ class FunkinAssets
 	 */
 	public static function getContent(key:String, useCache:Bool = true):String
 	{
-		if (cache.currentTrackedData.exists(key))
+		if (useCache && cache.currentTrackedData.exists(key))
 		{
 			cache.localTrackedAssets.push(key);
 			
@@ -92,7 +92,7 @@ class FunkinAssets
 		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(key)) data = File.getContent(key);
 		else #end if (Assets.exists(key)) data = Assets.getText(key);
 		
-		if (data != null) cache.cacheData(key, data);
+		if (data != null && useCache) cache.cacheData(key, data);
 		else throw 'Couldnt find file at path [$key]';
 		
 		return data;
