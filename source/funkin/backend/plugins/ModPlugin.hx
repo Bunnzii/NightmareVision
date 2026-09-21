@@ -10,6 +10,7 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 {
 	@:nullSafety(Off)
 	public static var instance:ModPlugin;
+	public static var script_list = [];
 	
 	public static function init()
 	{
@@ -50,6 +51,7 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 		scripts.clear(callDestroy);
 		
 		forEach(member -> FlxDestroyUtil.destroy(member));
+		script_list = [];
 		clear();
 	}
 	
@@ -84,6 +86,7 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 				var script = FunkinScript.fromFile(file, scriptName, false);
 				
 				scripts.addScript(script, true);
+				script_list.push(script);
 				script.execute();
 				
 				if (script.parsingFailed())

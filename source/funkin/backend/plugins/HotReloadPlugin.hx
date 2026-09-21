@@ -45,6 +45,8 @@ class HotReloadPlugin extends FlxBasic
 		
 		if (Controls.instance.SOFT_RELOAD)
 		{
+			extensions.hscript.IrisEx.softDestroy();
+			
 			FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
 			FlxG.resetState();
 			
@@ -53,6 +55,8 @@ class HotReloadPlugin extends FlxBasic
 		
 		if (Controls.instance.HARD_RELOAD)
 		{
+			crowplexus.iris.Iris.destroyAll();
+			
 			FlxG.signals.preStateCreate.addOnce((state) -> {
 				FunkinAssets.cache.clearStoredMemory();
 				FunkinAssets.cache.clearUnusedMemory();

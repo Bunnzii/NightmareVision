@@ -34,4 +34,14 @@ class IrisEx extends Iris
 		// run the script.
 		if (this.config.autoRun) execute();
 	}
+	
+	public static function softDestroy()
+	{
+		for (key in Iris.instances.keys())
+		{
+			var iris = Iris.instances.get(key);
+			if (iris.interp == null || funkin.backend.plugins.ModPlugin.script_list.contains(iris)) continue;
+			iris.destroy();
+		}
+	}
 }
