@@ -51,7 +51,7 @@ class HotReloadPlugin extends FlxBasic
 			Mods.applyModConfig();
 		}
 		
-	if (Controls.instance.HARD_RELOAD)
+		if (Controls.instance.HARD_RELOAD)
 		{
 			FlxG.signals.preStateCreate.addOnce((state) -> {
 				FunkinAssets.cache.clearStoredMemory();

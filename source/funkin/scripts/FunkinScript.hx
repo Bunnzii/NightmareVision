@@ -401,4 +401,17 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		
 		set("newShader", FunkinRuntimeShader.fromPath);
 	}
+	
+	override function destroy()
+	{
+		if (interp != null)
+		{
+			final ex:InterpEx = cast interp;
+			ex.variables.clear();
+			ex.parent = null;
+			ex.sharedFields = null;
+		}
+		parsingException = null;
+		super.destroy();
+	}
 }
