@@ -40,7 +40,7 @@ class IrisEx extends Iris
 		for (key in Iris.instances.keys())
 		{
 			var iris = Iris.instances.get(key);
-			if (iris.interp == null || funkin.backend.plugins.ModPlugin.script_list.contains(iris)) continue;
+			if (iris.interp == null || funkin.backend.plugins.ModPlugin.SCRIPT_LIST.contains(iris)) continue;
 			iris.destroy();
 		}
 	}
