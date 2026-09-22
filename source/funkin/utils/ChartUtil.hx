@@ -1,4 +1,4 @@
-package funkin.data;
+package funkin.utils;
 
 import funkin.backend.Difficulty;
 import funkin.data.StageData;
@@ -19,7 +19,7 @@ enum abstract ChartFormat(String) to String
  * General utility class to load Chart data
  */
 @:nullSafety
-class Chart
+class ChartUtil
 {
 	/**
 	 * Attempts to get a songs data from a given path

@@ -1,7 +1,7 @@
 package funkin.states.editors;
 
 import funkin.objects.nodes.AttachedNode;
-import funkin.data.Chart;
+import funkin.utils.ChartUtil;
 
 import haxe.ds.IntMap;
 import haxe.Json;
@@ -582,7 +582,7 @@ class OLDChartEditorState extends MusicBeatState
 			{
 				clearEvents();
 				
-				final _events = Chart.fromPath(file);
+				final _events = ChartUtil.fromPath(file);
 				_song.events = _events.events;
 				changeSection(curSec);
 			}
@@ -2467,7 +2467,7 @@ class OLDChartEditorState extends MusicBeatState
 					char.sing(note.noteData % 4);
 					
 					if (!playedSound[note.lane] && ((playSoundBf.checked && note.mustPress) || (playSoundDad.checked && !note.mustPress)))
-					{						
+					{
 						FlxG.sound.play(Paths.sound('hitsound')).pan = (note.noteData < (_song.keys * .5) ? -0.3 : 0.3); // would be coolio
 						playedSound[note.lane] = true;
 					}
@@ -3712,7 +3712,7 @@ class OLDChartEditorState extends MusicBeatState
 		{
 			final songName = Paths.sanitize(song);
 			
-			ChartEditorState.song = Chart.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
+			ChartEditorState.song = ChartUtil.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
 		}
 		catch (e)
 		{

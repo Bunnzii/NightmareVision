@@ -234,7 +234,7 @@ class PauseSubState extends MusicBeatSubState
 					
 					try
 					{
-						PlayState.SONG = Chart.fromSong(PlayState.SONG.song, curSelected);
+						PlayState.SONG = ChartUtil.fromSong(PlayState.SONG.song, curSelected);
 					}
 					catch (e)
 					{

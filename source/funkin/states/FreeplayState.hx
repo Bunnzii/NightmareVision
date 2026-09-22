@@ -4,7 +4,7 @@ import funkin.input.TurboControl;
 import funkin.input.TurboControl.TurboControlGroup;
 import funkin.backend.FallbackState;
 import funkin.states.editors.ChartConverterState;
-import funkin.data.Chart.ChartFormat;
+import funkin.utils.ChartUtil.ChartFormat;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -359,7 +359,7 @@ class FreeplayState extends MusicBeatState
 				destroyFreeplayVocals();
 				if (FlxG.sound.music != null) FlxG.sound.music.volume = 0;
 				Mods.currentModDirectory = songs[curSelected].folder;
-				PlayState.SONG = Chart.fromSong(songs[curSelected].songName, curDifficulty);
+				PlayState.SONG = ChartUtil.fromSong(songs[curSelected].songName, curDifficulty);
 				
 				// ??? why would you ever to do rewrite this
 				if (PlayState.SONG.needsVoices) vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));

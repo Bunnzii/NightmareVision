@@ -134,7 +134,6 @@ class ScriptGroup implements IFlxDestroyable
 	public function call(func:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>):Void
 	{
 		exclusions ??= [];
-		var returnVal:Dynamic = ScriptConstants.CONTINUE_FUNC;
 		for (script in members)
 		{
 			if (script == null || !script.exists(func) || exclusions.contains(script.name))

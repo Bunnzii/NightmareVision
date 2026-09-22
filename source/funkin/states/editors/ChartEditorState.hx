@@ -1,7 +1,7 @@
 package funkin.states.editors;
 
 import funkin.objects.nodes.AttachedNode;
-import funkin.data.Chart;
+import funkin.utils.ChartUtil;
 
 import haxe.ds.IntMap;
 import haxe.Json;
@@ -2684,7 +2684,7 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		try
 		{
 			final songName = Paths.sanitize(song);
-			PlayState.SONG = Chart.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
+			PlayState.SONG = ChartUtil.fromPath(Paths.json('$songName/charts/${Difficulty.getDifficultyFilePath()}'));
 		}
 		catch (e)
 		{

@@ -84,7 +84,7 @@ class PlayState extends MusicBeatState
 	{
 		try
 		{
-			PlayState.SONG = Chart.fromSong(songs[0], difficulty);
+			PlayState.SONG = ChartUtil.fromSong(songs[0], difficulty);
 			PlayState.storyMeta.playlist = songs;
 			PlayState.storyMeta.difficulty = difficulty;
 			PlayState.isStoryMode = isStoryMode;
@@ -105,7 +105,7 @@ class PlayState extends MusicBeatState
 	{
 		try
 		{
-			PlayState.SONG = Chart.fromSong(songName, difficulty);
+			PlayState.SONG = ChartUtil.fromSong(songName, difficulty);
 			PlayState.storyMeta.difficulty = difficulty;
 			PlayState.isStoryMode = isStoryMode;
 			
@@ -157,8 +157,6 @@ class PlayState extends MusicBeatState
 	var speedChanges:Array<SpeedEvent> = [{}];
 	
 	public var currentSV:SpeedEvent = {};
-	
-	public var noteRows:Array<Array<Array<Note>>> = [[], []];
 	
 	public var variables:Map<String, Dynamic> = new Map();
 	
@@ -599,7 +597,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = true;
 		persistentDraw = true;
 		
-		SONG ??= Chart.fromPath(Paths.json('test/test'));
+		SONG ??= ChartUtil.fromPath(Paths.json('test/test'));
 		
 		Conductor.mapBPMChanges(SONG);
 		Conductor.bpm = SONG.bpm;
@@ -1176,7 +1174,7 @@ class PlayState extends MusicBeatState
 		
 		if (FunkinAssets.exists(file))
 		{
-			final eventsData:Array<Dynamic> = Chart.fromPath(file).events;
+			final eventsData:Array<Dynamic> = ChartUtil.fromPath(file).events;
 			
 			for (event in eventsData) // Event Notes
 			{
@@ -2553,7 +2551,7 @@ class PlayState extends MusicBeatState
 					
 					trace('LOADING: ' + Paths.sanitize(storyMeta.playlist[0]) + difficulty);
 					
-					PlayState.SONG = Chart.fromSong(songLowercase, PlayState.storyMeta.difficulty);
+					PlayState.SONG = ChartUtil.fromSong(songLowercase, PlayState.storyMeta.difficulty);
 					
 					FlxG.sound.music.stop();
 					
