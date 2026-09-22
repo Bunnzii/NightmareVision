@@ -7,6 +7,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+import funkin.game.modchart.ModManager;
 import funkin.objects.Character;
 import funkin.data.*;
 
@@ -82,6 +83,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var offsetReceptors:Bool = false;
 	public var player:Int = 0;
 	public var alpha(default, set):Float = 1;
+	
+	public var holdDropLeniency:Float = (1 / 3);
 	
 	public var underlaySpr:FlxSprite;
 	public var underlayAlphaMult:Float = 1;
@@ -256,11 +259,13 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		clearReceptors();
 		for (data in 0...keyCount)
 		{
-			var babyArrow:StrumNote = new StrumNote(player, baseX, baseY, data, this);
+			var babyArrow:StrumNote = new StrumNote(player, baseX + ModManager.getStrumX(data, keyCount), baseY, data, this);
+			babyArrow.y -= (babyArrow.height / 2);
+			babyArrow.x -= (babyArrow.width / 2);
+			
 			babyArrow.downScroll = ClientPrefs.downScroll;
 			babyArrow.alphaMult = alpha;
 			add(babyArrow);
-			babyArrow.postAddedToGroup();
 		}
 	}
 	
@@ -326,7 +331,9 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		note.baseScale.copyFrom(note.scale);
 		note.updateHitbox();
-		if (note.playField != this || note.playField == null) note.playField = this;
+		
+		note.playField = this;
+		note.strum = members[note.noteData];
 	}
 	
 	public inline function forEachAliveNote(func:Note->Void)
@@ -350,80 +357,79 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		final scriptEv = PlayState.instance.dispatchEvent(scriptFunc, EventCache.get(NoteEvent).recycle(note, field.ID));
 		
-		if (!scriptEv.cancelled)
-		{ // note guts here i just hid them
-			PlayState.instance.dispatchEvent('${scriptFunc}Pre', EventCache.get(NoteEvent).recycle(note, field.ID));
+		PlayState.instance.scripts.call('${scriptFunc}Pre', scriptArgs);
+		
+		final strum:StrumNote = field.members[note.noteData];
+		if (strum != null)
+		{
+			strum.lastNote = note;
 			
-			final strum:StrumNote = field.members[note.noteData];
-			if (strum != null)
+			if (field.playAnims) strum.playAnim('confirm', true);
+			
+			if (field.autoPlayed)
 			{
-				strum.lastNote = note;
-				if (field.playAnims) strum.playAnim('confirm', true);
+				var time:Float = 0.15;
+				if (note.isSustainNote && !note.isSustainEnd) time += 0.15;
+				time /= PlayState.instance.playbackRate;
 				
-				if (field.autoPlayed)
-				{
-					var time:Float = 0.15;
-					if (note.isSustainNote && !note.isSustainEnd) time += 0.15;
-					time /= PlayState.instance.playbackRate;
-					
-					strum.resetAnim = time;
-				}
+				strum.resetAnim = time;
 			}
 			
-			if (!note.isSustainNote)
+			if (note.isSustainNote)
 			{
-				for (sustain in note.tail)
-					sustain.blockHit = false; // makes the hold note active when you press the base note
+				strum.coyoteTime = field.holdDropLeniency;
 			}
-			
-			if (field.playerControls)
+			else
 			{
-				if (note.wasGoodHit || field.autoPlayed && (note.ignoreNote || note.hitCausesMiss || note.canMiss)) return;
-				
-				if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled) FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
-				
-				if (note.hitCausesMiss)
-				{
-					field.onNoteMiss.dispatch(note, field);
-					
-					note.wasGoodHit = true;
-					
-					if (!note.isSustainNote) disposeNote(note);
-					
-					return;
-				}
-				
-				final susMult:Float = (note.isSustainNote ? 1 / PlayState.instance.holdSubdivisions : 1);
-				
-				PlayState.instance.health += note.hitHealth * PlayState.instance.healthGain * susMult;
+				note.tailState.active = true;
 			}
-			
-			var chars:Array<Null<Character>> = note.gfNote ? [PlayState.instance.gf] : field.singers;
-			if (note.owner != null) chars = [note.owner];
-			
-			for (char in chars)
-				if (char != null) characterSing(char, note, field.playerControls);
-				
-			note.wasGoodHit = true;
-			
-			var shouldSplash:Bool = field.noteSplashes;
-			if (field.playerControls)
-			{
-				var ratingThing:funkin.game.Rating = funkin.game.Rating.judgeNote(note,
-					Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset) / PlayState.instance?.playbackRate);
-				note.rating = ratingThing;
-				shouldSplash = field.noteSplashes && ratingThing.ratingMod >= 1;
-			}
-			if (shouldSplash) field.spawnSplash(note);
-			
-			spawnSusSplash(note, field.playerControls);
 		}
 		
-		if (scriptEv.shouldPropagate)
+		if (field.playerControls)
 		{
-			PlayState.instance.dispatchEvent('hit', EventCache.get(NoteEvent).recycle(note, field.ID));
-			PlayState.instance.dispatchEvent(scriptFunc, EventCache.get(NoteEvent).recycle(note, field.ID));
+			if (note.wasGoodHit || field.autoPlayed && (note.ignoreNote || note.hitCausesMiss || note.canMiss)) return;
+			
+			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled) FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+			
+			if (note.hitCausesMiss)
+			{
+				field.onNoteMiss.dispatch(note, field);
+				
+				note.wasGoodHit = true;
+				
+				if (!note.isSustainNote) disposeNote(note);
+				
+				return;
+			}
+			
+			final susMult:Float = (note.isSustainNote ? 1 / PlayState.instance.holdSubdivisions : 1);
+			
+			PlayState.instance.health += note.hitHealth * PlayState.instance.healthGain * susMult;
 		}
+		
+		var chars:Array<Null<Character>> = note.gfNote ? [PlayState.instance.gf] : field.singers;
+		if (note.owner != null) chars = [note.owner];
+		
+		for (char in chars)
+			if (char != null) characterSing(char, note, field.playerControls);
+			
+		note.wasGoodHit = true;
+		
+		var shouldSplash = field.noteSplashes;
+		if (field.playerControls)
+		{
+			var ratingThing:funkin.game.Rating = funkin.game.Rating.judgeNote(note, Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset) / PlayState.instance?.playbackRate);
+			note.rating = ratingThing;
+			shouldSplash = field.noteSplashes && ratingThing.ratingMod >= 1;
+		} 
+		if(shouldSplash) field.spawnSplash(note);
+		
+		spawnSusSplash(note, field.playerControls);
+		
+		final globalScript = PlayState.instance.callNoteTypeScript(note.noteType, 'hit', scriptArgs);
+		
+		final noteScriptRet = PlayState.instance.callNoteTypeScript(note.noteType, scriptFunc, scriptArgs);
+		if (noteScriptRet != ScriptConstants.STOP_FUNC) PlayState.instance.scripts.call(scriptFunc, scriptArgs, false, [note.noteType]);
 		
 		if (!scriptEv.cancelled && !note.isSustainNote) disposeNote(note);
 	}
@@ -459,12 +465,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (!note.hitCausesMiss && !note.canMiss)
 		{
 			final tail = (note.isSustainNote ? note.parent.tail : note.tail);
-			for (sustain in tail)
-			{
-				sustain.blockHit = true;
-				sustain.ignoreNote = true;
-				sustain.alphaMod *= 0.3;
-			}
+			for (sustain in tail) sustain.tooLate = true;
 		}
 		
 		// if the sustain splash exists, KILL KIL KILL IT KILL KI L KLLK LSKD:LKLK

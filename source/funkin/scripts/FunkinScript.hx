@@ -56,6 +56,12 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 	 */
 	public static function init()
 	{
+		#if FLX_DEBUG
+		FlxG.console.registerClass(Iris);
+		FlxG.console.registerClass(IrisEx);
+		FlxG.console.registerClass(FunkinScript);
+		#end
+		
 		inline function formatFileLoc(fileName:String, lineNumber:Int, x:String)
 		{
 			var tempName = '[$fileName:$lineNumber]';
@@ -70,7 +76,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		Iris.warn = (x, ?pos) -> {
 			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
+			DebugTextPlugin.instance.addText(Std.string(output), Logger.getHexColourFromSeverity(WARN));
 			
 			Iris.logLevel(ERROR, x, pos);
 		}
@@ -78,7 +84,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		Iris.error = (x, ?pos) -> {
 			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
+			DebugTextPlugin.instance.addText(Std.string(output), Logger.getHexColourFromSeverity(ERROR));
 			
 			Iris.logLevel(NONE, x, pos);
 		}
@@ -86,7 +92,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		Iris.print = (x, ?pos) -> {
 			final output:String = formatFileLoc(pos.fileName, pos.lineNumber, x);
 			
-			DebugTextPlugin.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
+			DebugTextPlugin.instance.addText(Std.string(output), Logger.getHexColourFromSeverity(PRINT));
 			
 			Iris.logLevel(NONE, x, pos);
 		}
@@ -114,7 +120,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 	{
 		name ??= file;
 		
-		return new FunkinScript(FunkinAssets.getContent(file), name, autoExecute, shareables);
+		return new FunkinScript(FunkinAssets.getContent(file, false), name, autoExecute, shareables);
 	}
 	
 	/**
@@ -234,12 +240,8 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set('curBpm', Conductor.bpm);
 		set('crotchet', Conductor.crotchet);
 		set('stepCrotchet', Conductor.stepCrotchet);
-		set('curBeat', 0);
-		set('curStep', 0);
-		set('curSection', 0);
-		set('curDecBeat', 0);
-		set('curDecStep', 0);
 		set('version', Main.NMV_VERSION.trim());
+		set('asset_redirect', #if ASSET_REDIRECT true #else false #end);
 		set('Defines', funkin.data.Defines);
 		
 		// set flixel related stuff

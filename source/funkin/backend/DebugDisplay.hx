@@ -194,7 +194,9 @@ class DebugDisplay extends Sprite
 	{
 		displayType = FpsDisplayMode.fromString(ClientPrefs.fpsDisplayType);
 		
-		if (!canUpdate || (displayType == FpsDisplayMode.DISABLED)) return;
+		if (!canUpdate || !visible) return;
+		
+		visible = displayType != FpsDisplayMode.DISABLED;
 		
 		visible = displayType != FpsDisplayMode.DISABLED;
 		
