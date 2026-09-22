@@ -426,7 +426,7 @@ class Character extends Bopper
 		final moveX = x + resolveDir(true);
 		final moveY = y + resolveDir(false);
 		
-		ghostTweenGrp[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveX, y: moveY}, 0.75,
+		ghostTweenGrp[ghostID] = FlxTween.tween(ghost, {alpha: 0, x: moveX, y: moveY}, 0.75 / (PlayState.instance?.playbackRate ?? 1.0),
 			{
 				onComplete: (twn) -> {
 					ghost.visible = false;
