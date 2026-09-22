@@ -83,6 +83,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 	public var player:Int = 0;
 	public var alpha(default, set):Float = 1;
 	
+	public var holdDropLeniency:Float = (1 / 3);
+	
 	public var underlaySpr:FlxSprite;
 	public var underlayAlphaMult:Float = 1;
 	
@@ -326,7 +328,9 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		note.baseScale.copyFrom(note.scale);
 		note.updateHitbox();
-		if (note.playField != this || note.playField == null) note.playField = this;
+		
+		note.playField = this;
+		note.strum = members[note.noteData];
 	}
 	
 	public inline function forEachAliveNote(func:Note->Void)
@@ -356,6 +360,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (strum != null)
 		{
 			strum.lastNote = note;
+			
 			if (field.playAnims) strum.playAnim('confirm', true);
 			
 			if (field.autoPlayed)
@@ -366,12 +371,15 @@ class PlayField extends FlxTypedContainer<StrumNote>
 				
 				strum.resetAnim = time;
 			}
-		}
-		
-		if (!note.isSustainNote)
-		{
-			for (sustain in note.tail)
-				sustain.blockHit = false; // makes the hold note active when you press the base note
+			
+			if (note.isSustainNote)
+			{
+				strum.coyoteTime = field.holdDropLeniency;
+			}
+			else
+			{
+				note.tailState.active = true;
+			}
 		}
 		
 		if (field.playerControls)
@@ -457,12 +465,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (!note.hitCausesMiss && !note.canMiss)
 		{
 			final tail = (note.isSustainNote ? note.parent.tail : note.tail);
-			for (sustain in tail)
-			{
-				sustain.blockHit = true;
-				sustain.ignoreNote = true;
-				sustain.alphaMod *= 0.3;
-			}
+			for (sustain in tail) sustain.tooLate = true;
 		}
 		
 		// if the sustain splash exists, KILL KIL KILL IT KILL KI L KLLK LSKD:LKLK
