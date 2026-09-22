@@ -1957,7 +1957,7 @@ class PlayState extends MusicBeatState
 	
 	public var isDead:Bool = false;
 	
-	function doDeathCheck(?skipHealthCheck:Bool = false):Bool
+	function doDeathCheck(skipHealthCheck:Bool = false):Bool
 	{
 		if ((skipHealthCheck && instakillOnMiss) || FunkinConstants.HEALTH_MIN >= health && !practiceMode && !isDead)
 		{

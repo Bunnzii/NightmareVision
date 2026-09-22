@@ -196,7 +196,6 @@ class ChartEditorState extends haxe.ui.backend.flixel.UIState
 		['Set Property', "Value 1: Variable name\nValue 2: New value"],
 		['HUD Fade', "Fades the HUD camera\n\nValue 1: Alpha\nValue 2: Duration"],
 		['Camera Fade', "Fades the game camera\n\nValue 1: Alpha\nValue 2: Duration"],
-		['Camera Flash', "Value 1: Color, Alpha (Optional)\nValue 2: Fade duration"],
 		[
 			'Camera Zoom',
 			"Changes the Camera Zoom.\n\nValue 1: Zoom Multiplier (1 is default)\n\nIn case you want a tween, use Value 2 like this:\n\n\"3, elasticOut\"\n(Duration, Ease Type)"
