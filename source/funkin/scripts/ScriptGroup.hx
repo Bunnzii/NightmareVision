@@ -131,7 +131,7 @@ class ScriptGroup implements IFlxDestroyable
 	}
 	
 	@:inheritDoc(funkin.scripts.FunkinScript.call)
-	public function call(func:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>):Dynamic
+	public function call(func:String, ?args:Array<Dynamic>, ignoreStops:Bool = false, ?exclusions:Array<String>):Void
 	{
 		exclusions ??= [];
 		var returnVal:Dynamic = ScriptConstants.CONTINUE_FUNC;
@@ -142,20 +142,8 @@ class ScriptGroup implements IFlxDestroyable
 				continue;
 			}
 			
-			var ret:Dynamic = script.call(func, args)?.returnValue;
-			if (ret != null)
-			{
-				if (ret == ScriptConstants.HALT_FUNC)
-				{
-					ret = returnVal;
-					if (!ignoreStops) return returnVal;
-				};
-				
-				if (ret != ScriptConstants.CONTINUE_FUNC) returnVal = ret;
-			}
+			script.call(func, args);
 		}
-		
-		return returnVal;
 	}
 	
 	/**

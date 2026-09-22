@@ -92,7 +92,6 @@ class PlayState extends MusicBeatState
 		}
 		catch (e)
 		{
-			// Logger.log('Failed to prepare for song.\nException $e', ERROR);
 			return e;
 		}
 	}
@@ -114,7 +113,6 @@ class PlayState extends MusicBeatState
 		}
 		catch (e)
 		{
-			// Logger.log('Failed to prepare for song.\nException $e', ERROR);
 			return e;
 		}
 	}
@@ -613,8 +611,6 @@ class PlayState extends MusicBeatState
 		rpcDescription = isStoryMode == true ? 'Story Mode:' : 'Freeplay:';
 		rpcPausedDescription = 'Paused - ' + rpcDescription;
 		rpcSongName = SONG.song;
-		
-		scripts.set('isStoryMode', isStoryMode);
 		
 		if (SONG.stage == null || SONG.stage.length == 0) SONG.stage = 'stage';
 		
@@ -2890,9 +2886,6 @@ class PlayState extends MusicBeatState
 			if (SONG.notes[curSection].changeBPM)
 			{
 				Conductor.bpm = SONG.notes[curSection].bpm;
-				scripts.set('curBpm', Conductor.bpm);
-				scripts.set('crotchet', Conductor.crotchet);
-				scripts.set('stepCrotchet', Conductor.stepCrotchet);
 			}
 			scripts.set('mustHitSection', SONG.notes[curSection].mustHitSection);
 			scripts.set('altAnim', SONG.notes[curSection].altAnim);
