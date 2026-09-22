@@ -45,7 +45,7 @@ class IrisEx extends Iris
 		{
 			var _interp:IFlxDestroyable = cast interp;
 			_interp = FlxDestroyUtil.destroy(_interp);
-			trace('killing' + name);
+			trace('killing ' + name);
 		}
 		#end
 		interp = null;
