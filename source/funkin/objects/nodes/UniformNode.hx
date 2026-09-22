@@ -4,6 +4,7 @@ import flixel.math.FlxRect;
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 
 // potentially we can make this a macro
+// a bit too hacky ill rethink this later
 
 /**
  * Attaches to a FlxSprite and allows it to ignore all camera transformations.

@@ -170,6 +170,9 @@ class FunkinCache // rerwite this entirely this is confusing and weird
 		return newGraphic;
 	}
 	
+	/**
+	 * Adds a Sound into the cache
+	 */
 	public function cacheSound(key:String, sound:Sound):Sound
 	{
 		currentTrackedSounds.set(key, sound);
@@ -179,12 +182,15 @@ class FunkinCache // rerwite this entirely this is confusing and weird
 		return sound;
 	}
 	
-	public function cacheData(key:String, data:String):String
+	/**
+	 * Adds a Text into the cache
+	 */
+	public function cacheText(key:String, text:String):String
 	{
-		currentTrackedTexts.set(key, data);
+		currentTrackedTexts.set(key, text);
 		localTrackedAssets.push(key);
 		
-		return data;
+		return text;
 	}
 	
 	public function toString():String

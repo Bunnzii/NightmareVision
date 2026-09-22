@@ -96,7 +96,7 @@ class FunkinAssets
 		
 		if (ret.length > 0)
 		{
-			if (useCache) cache.cacheData(key, ret);
+			if (useCache) cache.cacheText(key, ret);
 		}
 		else throw 'Couldnt find file at path [$key]';
 		
