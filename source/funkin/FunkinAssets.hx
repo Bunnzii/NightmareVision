@@ -94,19 +94,16 @@ class FunkinAssets
 		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(key)) ret = File.getContent(key);
 		else #end if (Assets.exists(key)) ret = Assets.getText(key);
 		
-		if (ret.length > 0)
-		{
-			return cache.cacheData(key, ret);
-		}
+		if (ret.length > 0 && useCache) return cache.cacheData(key, ret);
 		
-		return null;
+		return ret;
 	}
 	
 	public static function getContent(key:String, useCache:Bool = true):String
 	{
 		final text:String = getContentUnsafe(key, useCache);
 		
-		if (text != null) return text;
+		if (text.length > 0) return text;
 		
 		Logger.log('text ($key) was not found. Returning empty string instead');
 		
