@@ -98,7 +98,6 @@ class FunkinAssets
 		{
 			if (useCache) cache.cacheData(key, ret);
 		}
-		else throw 'Couldnt find file at path [$key]';
 		
 		return ret;
 	}
