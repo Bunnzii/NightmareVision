@@ -61,11 +61,11 @@ class StrumNote extends funkin.game.modchart.ModchartNote
 	
 	public function new(player:Int, x:Float, y:Float, leData:Int, ?parent:PlayField)
 	{
-		noteData = leData;
-		this.noteData = leData;
+		super(x, y);
+		
+		this.ID = this.noteData = leData;
 		this.parent = parent;
 		this.player = player;
-		super(x, y);
 		
 		skin = NoteUtil.getSkinFromID(parent?.player ?? 0);
 		
@@ -79,6 +79,7 @@ class StrumNote extends funkin.game.modchart.ModchartNote
 		isQuant = parent?.quants ?? ClientPrefs.quants;
 		
 		handleColors();
+		playAnim('static');
 	}
 	
 	public var lastNote:Null<Note> = null;
@@ -146,15 +147,6 @@ class StrumNote extends funkin.game.modchart.ModchartNote
 			animation.addByPrefix(anim.anim, anim.xmlName, anim.fps, anim.looping);
 			addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
 		}
-	}
-	
-	public function postAddedToGroup()
-	{
-		playAnim('static');
-		x -= swagWidth / 2;
-		x = x - (swagWidth * 2) + (swagWidth * noteData) + 54;
-		
-		ID = noteData;
 	}
 	
 	override function update(elapsed:Float)

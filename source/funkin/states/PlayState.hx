@@ -913,7 +913,10 @@ class PlayState extends MusicBeatState
 			
 			final auto = (lane != 0 || cpuControlled);
 			
-			var strums = new PlayField(0, 0, SONG.keys, character, isPlayer, auto, lane, arrowSkins[lane]);
+			var baseY:Float = ModManager.getBaseY();
+			if (ClientPrefs.downScroll) baseY = (FlxG.height - baseY);
+			
+			var strums = new PlayField(ModManager.getCenterX(lane, SONG.keys), baseY, SONG.keys, character, isPlayer, auto, lane, arrowSkins[lane]);
 			// strums.scale = NoteUtil.getSkinFromID(lane).scale;
 			scripts.call('preReceptorGeneration', [strums, lane]);
 			strums.generateReceptors();

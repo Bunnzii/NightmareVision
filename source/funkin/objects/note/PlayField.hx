@@ -7,6 +7,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+import funkin.game.modchart.ModManager;
 import funkin.objects.Character;
 import funkin.data.*;
 
@@ -258,11 +259,13 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		clearReceptors();
 		for (data in 0...keyCount)
 		{
-			var babyArrow:StrumNote = new StrumNote(player, baseX, baseY, data, this);
+			var babyArrow:StrumNote = new StrumNote(player, baseX + ModManager.getStrumX(data, keyCount), baseY, data, this);
+			babyArrow.y -= (babyArrow.height / 2);
+			babyArrow.x -= (babyArrow.width / 2);
+			
 			babyArrow.downScroll = ClientPrefs.downScroll;
 			babyArrow.alphaMult = alpha;
 			add(babyArrow);
-			babyArrow.postAddedToGroup();
 		}
 	}
 	
