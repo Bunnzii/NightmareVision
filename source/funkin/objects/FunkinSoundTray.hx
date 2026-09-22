@@ -18,13 +18,6 @@ import funkin.utils.MathUtil;
  */
 class FunkinSoundTray extends FlxSoundTray
 {
-	/**
-	 * Disables functionality of the soundtray.
-	 * 
-	 * Useful if u want to create ur own soundtray plugin.
-	 */
-	public static var canShow:Bool = true;
-	
 	var graphicScale:Float = 0.30;
 	var lerpYPos:Float = 0;
 	var alphaTarget:Float = 0;
@@ -133,10 +126,6 @@ class FunkinSoundTray extends FlxSoundTray
 	
 	function showFunkinBar(up:Bool = false)
 	{
-		if (!FunkinSoundTray.canShow)
-		{
-			return;
-		}
 		_timer = 1;
 		lerpYPos = 10;
 		visible = true;
