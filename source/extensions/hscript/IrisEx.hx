@@ -1,5 +1,7 @@
 package extensions.hscript;
 
+import flixel.util.FlxDestroyUtil;
+
 import crowplexus.iris.Iris;
 import crowplexus.iris.IrisConfig.AutoIrisConfig;
 import crowplexus.iris.IrisConfig;
@@ -35,13 +37,18 @@ class IrisEx extends Iris
 		if (this.config.autoRun) execute();
 	}
 	
-	public static function softDestroy()
+	override function destroy()
 	{
-		for (key in Iris.instances.keys())
+		if (Iris.instances.exists(this.name)) Iris.instances.remove(this.name);
+		#if flixel
+		if (interp is InterpEx)
 		{
-			var iris = Iris.instances.get(key);
-			if (iris.interp == null || funkin.backend.plugins.ModPlugin.SCRIPT_LIST.contains(iris)) continue;
-			iris.destroy();
+			var _interp:IFlxDestroyable = cast interp;
+			_interp = FlxDestroyUtil.destroy(_interp);
+			trace('killing' + name);
 		}
+		#end
+		interp = null;
+		parser = null;
 	}
 }

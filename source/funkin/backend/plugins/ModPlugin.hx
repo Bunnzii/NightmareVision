@@ -10,7 +10,6 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 {
 	@:nullSafety(Off)
 	public static var instance:ModPlugin;
-	public static var SCRIPT_LIST:Array<crowplexus.iris.Iris> = [];
 	
 	public static function init()
 	{
@@ -51,7 +50,6 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 		scripts.clear(callDestroy);
 		
 		forEach(member -> FlxDestroyUtil.destroy(member));
-		SCRIPT_LIST = [];
 		clear();
 	}
 	
@@ -86,7 +84,6 @@ class ModPlugin extends FlxTypedGroup<FlxBasic>
 				var script = FunkinScript.fromFile(file, scriptName, false);
 				
 				scripts.addScript(script, true);
-				SCRIPT_LIST.push(script);
 				script.execute();
 				
 				if (script.parsingFailed())
