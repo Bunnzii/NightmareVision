@@ -357,7 +357,7 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		final scriptEv = PlayState.instance.dispatchEvent(scriptFunc, EventCache.get(NoteEvent).recycle(note, field.ID));
 		
-		PlayState.instance.scripts.call('${scriptFunc}Pre', scriptArgs);
+		// PlayState.instance.scripts.call('${scriptFunc}Pre', scriptArgs);
 		
 		final strum:StrumNote = field.members[note.noteData];
 		if (strum != null)
@@ -421,15 +421,15 @@ class PlayField extends FlxTypedContainer<StrumNote>
 			var ratingThing:funkin.game.Rating = funkin.game.Rating.judgeNote(note, Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset) / PlayState.instance?.playbackRate);
 			note.rating = ratingThing;
 			shouldSplash = field.noteSplashes && ratingThing.ratingMod >= 1;
-		} 
-		if(shouldSplash) field.spawnSplash(note);
+		}
+		if (shouldSplash) field.spawnSplash(note);
 		
 		spawnSusSplash(note, field.playerControls);
 		
-		final globalScript = PlayState.instance.callNoteTypeScript(note.noteType, 'hit', scriptArgs);
+		// final globalScript = PlayState.instance.callNoteTypeScript(note.noteType, 'hit', scriptArgs);
 		
-		final noteScriptRet = PlayState.instance.callNoteTypeScript(note.noteType, scriptFunc, scriptArgs);
-		if (noteScriptRet != ScriptConstants.STOP_FUNC) PlayState.instance.scripts.call(scriptFunc, scriptArgs, false, [note.noteType]);
+		// final noteScriptRet = PlayState.instance.callNoteTypeScript(note.noteType, scriptFunc, scriptArgs);
+		// if (noteScriptRet != ScriptConstants.STOP_FUNC) PlayState.instance.scripts.call(scriptFunc, scriptArgs, false, [note.noteType]);
 		
 		if (!scriptEv.cancelled && !note.isSustainNote) disposeNote(note);
 	}
@@ -465,7 +465,8 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		if (!note.hitCausesMiss && !note.canMiss)
 		{
 			final tail = (note.isSustainNote ? note.parent.tail : note.tail);
-			for (sustain in tail) sustain.tooLate = true;
+			for (sustain in tail)
+				sustain.tooLate = true;
 		}
 		
 		// if the sustain splash exists, KILL KIL KILL IT KILL KI L KLLK LSKD:LKLK
