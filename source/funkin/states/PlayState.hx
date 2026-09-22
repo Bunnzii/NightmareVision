@@ -2629,8 +2629,7 @@ class PlayState extends MusicBeatState
 		
 		if (cpuControlled || paused || !startedCountdown)
 		{
-			scripts.call('onKeyPress', [key]);
-			scripts.call('onInputPress', [key]);
+			dispatchEvent('onInputPress', EventCache.get(KeyPressEvent).recycle(key, event));
 			return;
 		}
 		
@@ -2700,7 +2699,7 @@ class PlayState extends MusicBeatState
 		
 		Conductor.songPosition = prevTime;
 		
-		scripts.event('onInputPress', EventCache.get(KeyPressEvent).recycle(key, event));
+		dispatchEvent('onInputPress', EventCache.get(KeyPressEvent).recycle(key, event));
 	}
 	
 	function onInputRelease(event:InputEvent):Void
@@ -2709,8 +2708,8 @@ class PlayState extends MusicBeatState
 		
 		if (!startedCountdown || paused)
 		{
-			scripts.call('onKeyRelease', [key]);
-			scripts.call('onInputRelease', [key]);
+			dispatchEvent('onInputRelease', EventCache.get(KeyPressEvent).recycle(key, event));
+			
 			return;
 		}
 		
@@ -2733,8 +2732,7 @@ class PlayState extends MusicBeatState
 				if (splash.alive && splash.noteData == key && !splash.completed) splash.kill();
 			}
 		}
-		scripts.call('onKeyRelease', [key]);
-		scripts.call('onInputRelease', [key]);
+		dispatchEvent('onInputRelease', EventCache.get(KeyPressEvent).recycle(key, event));
 	}
 	
 	// Hold notes
