@@ -454,7 +454,8 @@ class Note extends funkin.game.modchart.ModchartNote
 		if (_prefix.length > 0) this.prefix = _prefix;
 		if (_suffix.length > 0) this.suffix = _suffix;
 		
-		if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, _prefix, _texture, _suffix], this) == ScriptConstants.STOP_FUNC) return;
+		// TODO: reimplement
+		// if (noteScript != null) if (noteScript.executeFunc("onReloadNote", [this, _prefix, _texture, _suffix], this) == ScriptConstants.STOP_FUNC) return;
 		
 		skin ??= NoteUtil.getSkinFromID(player);
 		
