@@ -238,6 +238,12 @@ class PsychHUD extends BaseHUD
 	{
 		var dad = parent.dad;
 		var boyfriend = parent.boyfriend;
+
+		if (parent.getFieldFromID(1) != null)
+			dad = parent.getFieldFromID(1).owner;
+		if (parent.getFieldFromID(0) != null)
+			boyfriend = parent.getFieldFromID(0).owner;
+
 		if (!healthBar.leftToRight)
 		{
 			healthBar.setColors(dad.healthColour, boyfriend.healthColour);

@@ -61,6 +61,8 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+using StringTools;
+
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
 class OLDChartEditorState extends MusicBeatState
@@ -1375,13 +1377,7 @@ class OLDChartEditorState extends MusicBeatState
 		directories.push(Paths.mods(Mods.currentModDirectory + '/data/events/'));
 		for (mod in Mods.globalMods)
 			directories.push(Paths.mods(mod + '/data/events/'));
-			
-		directories.push(Paths.mods('events/'));
-		directories.push(Paths.mods(Mods.currentModDirectory + '/events/'));
-		for (mod in Mods.globalMods)
-			directories.push(Paths.mods(mod + '/events/'));
-			
-		var eventexts = FunkinScript.H_EXTS.concat(["txt"]);
+		// we dont need 2 events folders.  SO I REMOVED THE OTHER!
 		
 		var pushedEvents:Array<String> = [];
 		for (event in eventStuff)
@@ -1392,19 +1388,24 @@ class OLDChartEditorState extends MusicBeatState
 			var directory:String = directories[i];
 			if (FunkinAssets.exists(directory))
 			{
-				var files = FunkinAssets.readDirectory(directory);
-				files.sort((a, b) -> return Path.extension(a) == "txt" ? 1 : 0);
-				
-				for (file in files)
+				var folders = FunkinAssets.readDirectory(directory);
+				for (eventFolder in folders)
 				{
-					var path = Path.join([directory, file]);
-					if (!FunkinAssets.isDirectory(path) && file != 'readme.txt' && eventexts.contains(Path.extension(file)))
+					var path = Path.join([directory, eventFolder]);
+					
+					var txtFile = '${path}/desc.txt';
+					var scriptFile = FunkinScript.getPath('${path}/script');
+					
+					if (FunkinAssets.isDirectory(path) && (FunkinAssets.exists(txtFile) || FunkinAssets.exists(scriptFile)))
 					{
-						var fileToCheck:String = Path.withoutExtension(file);
+						var fileToCheck:String = Path.withoutExtension(eventFolder);
 						if (!pushedEvents.contains(fileToCheck))
 						{
-							if (FunkinScript.H_EXTS.contains(Path.extension(file))) eventStuff.push([fileToCheck, 'scripted description']);
-							else eventStuff.push([fileToCheck, File.getContent(path)]);
+							var description:String = 'MISSING DESCRIPTION';
+							if (FunkinAssets.exists(txtFile)) description = File.getContent(txtFile);
+							
+							// i have no clue if this fixed it so im just not gonna touch it SORRY
+							eventStuff.push([fileToCheck, description.replace("\r", "")]);
 						}
 						pushedEvents.push(fileToCheck);
 					}
@@ -2467,7 +2468,7 @@ class OLDChartEditorState extends MusicBeatState
 					char.sing(note.noteData % 4);
 					
 					if (!playedSound[note.lane] && ((playSoundBf.checked && note.mustPress) || (playSoundDad.checked && !note.mustPress)))
-					{						
+					{
 						FlxG.sound.play(Paths.sound('hitsound')).pan = (note.noteData < (_song.keys * .5) ? -0.3 : 0.3); // would be coolio
 						playedSound[note.lane] = true;
 					}

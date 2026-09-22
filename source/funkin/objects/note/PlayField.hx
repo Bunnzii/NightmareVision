@@ -511,13 +511,6 @@ class PlayField extends FlxTypedContainer<StrumNote>
 		
 		char.holdTimer = 0;
 		
-		if (hold && !note.playField?.autoPlayed)
-		{
-			PlayState.instance?.holders.push(char);
-			
-			char.holding = true;
-		}
-		
 		switch (note.noteType)
 		{
 			case 'Hey!' if (char.animation.exists('hey')):

@@ -38,7 +38,6 @@ class Character extends Bopper
 	
 	public var animTimer:Float = 0;
 	public var specialAnim:Bool = false;
-	public var holding(default, set):Bool = false;
 	public var stunned:Bool = false;
 	
 	/**
@@ -280,7 +279,7 @@ class Character extends Bopper
 			}
 		}
 		
-		if (specialAnim && isAnimFinished() && !holding)
+		if (specialAnim && isAnimFinished())
 		{
 			specialAnim = false;
 			dance(forceDance);
@@ -295,9 +294,9 @@ class Character extends Bopper
 			dance(forceDance);
 		}
 		
-		if (getAnimName().startsWith('sing') || holding) holdTimer += elapsed;
+		if (getAnimName().startsWith('sing')) holdTimer += elapsed;
 		
-		if (!holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
+		if (holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
 		{
 			dance(forceDance);
 			holdTimer = 0;
@@ -323,17 +322,6 @@ class Character extends Bopper
 			}
 		}
 		super.draw();
-	}
-	
-	function set_holding(isIt:Bool):Bool
-	{
-		if (!isIt && holding && holdTimer >= Conductor.stepCrotchet * 0.001 * singDuration)
-		{
-			dance(forceDance);
-			holdTimer = 0;
-		}
-		
-		return holding = isIt;
 	}
 	
 	/**
@@ -364,7 +352,7 @@ class Character extends Bopper
 	
 	override function onBeatHit(beat:Int)
 	{
-		if (stunned || getAnimName().startsWith('sing') || holding) return;
+		if (stunned || getAnimName().startsWith('sing')) return;
 		super.onBeatHit(beat);
 	}
 	

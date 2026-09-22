@@ -113,15 +113,16 @@ class PauseSubState extends MusicBeatSubstate
 			if (addtoo) add(t);
 			return t;
 		}
-		
-		var levelInfo = createCornerText(PlayState.SONG.song);
+
+		var meta:SongMetaData = PlayState.meta;
+
+		var levelInfo = createCornerText(meta != null ? meta.displayName : PlayState.SONG.song);
 		add(levelInfo);
 		
 		var levelDifficulty = createCornerText(Difficulty.getCurrentDifficultyString());
 		add(levelDifficulty);
 		
 		// temp just wanted to see this
-		var meta:SongMetaData = PlayState.meta;
 		if (meta != null)
 		{
 			if (meta.composers != null && meta.composers.length > 0) createCornerText("Composers: " + meta.composers.join(', '), true);

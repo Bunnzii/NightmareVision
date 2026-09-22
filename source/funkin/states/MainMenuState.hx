@@ -98,7 +98,7 @@ class MainMenuState extends MusicBeatState
 		var gitHash = GitMacro.getGitCommitHash();
 		if (gitHash.length != 0) gitHash = ' - dev($gitHash)';
 		
-		final ver = "Nightmare Vision Engine v" + Main.NMV_VERSION + gitHash + '\nPsych Engine v' + Main.PSYCH_VERSION + "\nFriday Night Funkin' v" + Main.FUNKIN_VERSION;
+		final ver = "Nightmare Vision Engine v" + Main.NMV_VERSION + '\n[Modified Build]';
 		
 		final verionDesc:FlxText = new FlxText(12, 0, 0, ver, 16);
 		verionDesc.setFormat(Paths.DEFAULT_FONT, 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -159,7 +159,7 @@ class MainMenuState extends MusicBeatState
 						switch (optionShit[curSelected])
 						{
 							case 'story_mode':
-								CoolUtil.switchState(StoryMenuState.new, NONE);
+								CoolUtil.switchState(StoryMenuState.new, SWIPE);
 							case 'freeplay':
 								CoolUtil.switchState(FreeplayState.new, SWIPE);
 							case 'credits':

@@ -167,6 +167,7 @@ class PlayState extends MusicBeatState
 	 */
 	public var isCameraOnForcedPos:Bool = false;
 	
+	public var camFollowsNotes:Bool = true;
 	public var cameraLerping:Bool = true;
 	
 	/**
@@ -379,6 +380,7 @@ class PlayState extends MusicBeatState
 	public var botplayTxt:FlxText;
 	
 	public var camHUD:FlxCamera;
+	public var camOverlay:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
 	public var cameraSpeed:Float = 1;
@@ -607,13 +609,16 @@ class PlayState extends MusicBeatState
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
 		
 		camGame = new FlxCameraEx();
+		camOverlay = new FlxCameraEx();
 		camHUD = new FlxCameraEx();
 		camOther = new FlxCameraEx();
 		
+		camOverlay.bgColor = 0x0;
 		camHUD.bgColor = 0x0;
 		camOther.bgColor = 0x0;
 		
 		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camOverlay, false);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		
@@ -928,7 +933,7 @@ class PlayState extends MusicBeatState
 			strums.onNoteHit.add((note, field) -> {
 				if (field.ID == 1) camZooming = true;
 				
-				if (field.playerControls || (!audio.splitVocals && !audio.trackSwap)) audio.setTrackVolumeState();
+				if (field.playerControls || (!audio.splitVocals && !audio.trackSwap)) audio.hit();
 				
 				if (field.playerControls && field.showRatings && !note.isSustainNote)
 				{
@@ -942,7 +947,7 @@ class PlayState extends MusicBeatState
 			{
 				if (combo > 5 && gf != null && gf.animOffsets.exists('sad')) gf.playAnimForDuration('sad', 1, true);
 				combo = 0;
-				audio.setTrackVolumeState(true);
+				audio.miss();
 				
 				if (instakillOnMiss) doDeathCheck(true);
 				
@@ -1436,8 +1441,8 @@ class PlayState extends MusicBeatState
 			
 			if (!eventsPushed.contains(eventName))
 			{
-				var baseScriptFile:String = 'data/events/$eventName';
-				if (!FunkinAssets.exists(FunkinScript.getPath(baseScriptFile), TEXT)) baseScriptFile = 'events/$eventName';
+				var baseScriptFile:String = 'data/events/${eventName}/script';
+				if (!FunkinAssets.exists(FunkinScript.getPath(baseScriptFile), TEXT)) baseScriptFile = 'data/events/${eventName}/desc';
 				
 				final scriptFile = FunkinScript.getPath(baseScriptFile);
 				
@@ -2459,7 +2464,7 @@ class PlayState extends MusicBeatState
 			camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
 			camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
 			
-			if (ClientPrefs.camFollowsCharacters)
+			if (camFollowsNotes)
 			{
 				final displacement = gf.getSingDisplacement();
 				
@@ -2518,7 +2523,7 @@ class PlayState extends MusicBeatState
 		camFollow.x = desiredPos.x;
 		camFollow.y = desiredPos.y;
 		
-		if (ClientPrefs.camFollowsCharacters)
+		if (camFollowsNotes)
 		{
 			final displacement = curCharacter.getSingDisplacement();
 			
@@ -2560,7 +2565,9 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.noteOffset <= 0 || ignoreNoteOffset) songEndCallback();
 		else
 		{
+			if (finishTimer != null) finishTimer.destroy();
 			finishTimer = new FlxTimer().start(ClientPrefs.noteOffset / 1000, function(tmr:FlxTimer) {
+				trace('end song with finish timer');
 				songEndCallback();
 			});
 		}
@@ -2832,9 +2839,6 @@ class PlayState extends MusicBeatState
 		scripts.call('onInputRelease', [key]);
 	}
 	
-	// Hold notes
-	var holders:Array<Character> = [];
-	
 	inline function processHolds():Void
 	{
 		if (!boyfriend.stunned)
@@ -2877,22 +2881,6 @@ class PlayState extends MusicBeatState
 				{
 					anyPressed = true;
 					break;
-				}
-			}
-			
-			if (!anyPressed)
-			{
-				for (field in playFields)
-				{
-					if (field.playerControls && field.owner?.holding) field.owner.holding = false;
-				}
-				
-				if (holders.length > 0)
-				{
-					for (holder in holders)
-						holder.holding = false;
-						
-					holders.resize(0);
 				}
 			}
 		}
