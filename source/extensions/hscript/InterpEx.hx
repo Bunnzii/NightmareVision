@@ -1,9 +1,5 @@
 package extensions.hscript;
 
-import haxe.ds.ObjectMap;
-
-import flixel.util.FlxDestroyUtil.IFlxDestroyable;
-
 import haxe.Constraints.IMap;
 import haxe.PosInfos;
 
@@ -25,7 +21,7 @@ import crowplexus.hscript.Tools;
  * 
  * public fields support with `Sharables`
  */
-class InterpEx extends crowplexus.hscript.Interp #if flixel implements IFlxDestroyable #end
+class InterpEx extends crowplexus.hscript.Interp #if flixel implements flixel.util.FlxDestroyUtil.IFlxDestroyable #end
 {
 	static var cachedFields:Map<String, Array<String>> = [];
 	
