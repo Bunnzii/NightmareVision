@@ -79,12 +79,11 @@ class BaseOptionsMenu extends MusicBeatSubState
 		
 		for (i in 0...optionsArray.length)
 		{
-			var optionText:Alphabet = new Alphabet(0, 70 * i, optionsArray[i].name, false);
+			var optionText:Alphabet = new Alphabet(0, 260, optionsArray[i].name, false);
 			optionText.isMenuItem = true;
 			optionText.x += 125;
-			/*optionText.forceX = 300;
-				optionText.yMult = 90; */
-			optionText.xAdd = 125;
+			optionText.itemNode.startingPosition.x = 220;
+			optionText.itemNode.distancePerItem.y *= 1.3;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
 			
@@ -98,7 +97,7 @@ class BaseOptionsMenu extends MusicBeatSubState
 			else if (optionsArray[i].type != 'button' && optionsArray[i].type != 'label')
 			{
 				optionText.x -= 80;
-				optionText.xAdd -= 80;
+				optionText.itemNode.startingPosition.x -= 80;
 				var valueText:Alphabet = new Alphabet(0, 0, Std.string(optionsArray[i].getValue()));
 				
 				valueText.ID = i;

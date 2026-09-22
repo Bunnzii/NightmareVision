@@ -83,7 +83,7 @@ class DebugTextPlugin extends FlxTypedGroup<DebugText>
 
 class DebugText extends FlxText
 {
-	private final UNDERLAY_PADDING = 5;
+	final UNDERLAY_PADDING = 5;
 	
 	public var disableTime:Float = 4;
 	public var traceCount:Int = 1;
@@ -91,7 +91,7 @@ class DebugText extends FlxText
 	
 	public var _trace = '';
 	
-	private var _underlay:FlxSprite;
+	var _underlay:FlxSprite;
 	
 	var _dirtyText:Bool = false;
 	
@@ -100,7 +100,7 @@ class DebugText extends FlxText
 		super(10, 10, FlxG.width, text, 16);
 		
 		// embedded font because fuuck you
-		setFormat(('assets/fonts/consolas.ttf'), 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		setFormat('assets/fonts/consolas.ttf', 18, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scrollFactor.set();
 		borderSize = 1.25;
 		this.color = color;

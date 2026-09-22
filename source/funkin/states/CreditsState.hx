@@ -134,12 +134,11 @@ class CreditsState extends MusicBeatState
 		
 		for (i in 0...credits.length)
 		{
-			var optionText:Alphabet = new Alphabet(0, 70 * i, credits[i].name, credits[i].isTitle);
+			var optionText:Alphabet = new Alphabet(0, 300, credits[i].name, credits[i].isTitle);
 			optionText.isMenuItem = true;
 			optionText.screenCenter(X);
-			optionText.yAdd -= 70;
-			optionText.changeAxis = Y;
 			optionText.targetY = i;
+			optionText.itemNode.scrollAxis = Y;
 			grpOptions.add(optionText);
 			
 			if (credits[i].isTitle) continue; // if its a title we dont need to worry about adding a icon

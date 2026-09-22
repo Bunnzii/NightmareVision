@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import funkin.objects.nodes.MenuItemNode;
+
 import flixel.util.FlxAxes;
 
 import openfl.media.Sound;
@@ -9,6 +11,8 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
+
+// TODO fix this this thing is garbage and has so many misc issues (constructor X completely breaking)
 
 /**
  * Loosley based on FlxTypeText lolol
@@ -20,12 +24,20 @@ class Alphabet extends FlxSpriteGroup
 	
 	public var changeAxis:FlxAxes = XY;
 	
-	// for menu shit
-	public var forceX:Float = Math.NEGATIVE_INFINITY;
-	public var targetY:Float = 0;
-	public var yMult:Float = 120;
-	public var xAdd:Float = 0;
-	public var yAdd:Float = 0;
+	public var itemNode:MenuItemNode;
+	
+	public var targetY(get, set):Int;
+	
+	public function get_targetY():Int
+	{
+		return itemNode.targetY;
+	}
+	
+	public function set_targetY(v:Int):Int
+	{
+		return itemNode.targetY = v;
+	}
+	
 	public var isMenuItem:Bool = false;
 	public var textSize:Float = 1.0;
 	
@@ -49,7 +61,6 @@ class Alphabet extends FlxSpriteGroup
 	public function new(x:Float, y:Float, text:String = "", bold:Bool = false, textSize:Float = 1)
 	{
 		super(x, y);
-		forceX = Math.NEGATIVE_INFINITY;
 		this.textSize = textSize;
 		
 		_finalText = text;
@@ -64,6 +75,7 @@ class Alphabet extends FlxSpriteGroup
 		{
 			finishedText = true;
 		}
+		itemNode = new MenuItemNode(this);
 	}
 	
 	public function changeText(newText:String)
@@ -301,19 +313,7 @@ class Alphabet extends FlxSpriteGroup
 	{
 		if (isMenuItem)
 		{
-			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
-			
-			final lerpRate = FlxMath.getElapsedLerp(0.16, elapsed);
-			
-			if (changeAxis.y) y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpRate);
-			if (forceX != Math.NEGATIVE_INFINITY)
-			{
-				if (changeAxis.x) x = forceX;
-			}
-			else
-			{
-				if (changeAxis.x) x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpRate);
-			}
+			itemNode.update(elapsed);
 		}
 		
 		super.update(elapsed);
@@ -323,18 +323,14 @@ class Alphabet extends FlxSpriteGroup
 	{
 		if (isMenuItem)
 		{
-			final scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
-			
-			y = (scaledY * yMult) + (FlxG.height * 0.48) + yAdd;
-			if (forceX != Math.NEGATIVE_INFINITY)
-			{
-				x = forceX;
-			}
-			else
-			{
-				x = (targetY * 20) + 90 + xAdd;
-			}
+			itemNode.snapToPosition();
 		}
+	}
+	
+	override function destroy()
+	{
+		itemNode.destroy();
+		super.destroy();
 	}
 }
 

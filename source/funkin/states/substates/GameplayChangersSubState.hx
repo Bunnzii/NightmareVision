@@ -106,12 +106,9 @@ class GameplayChangersSubState extends MusicBeatSubState
 		
 		for (i in 0...optionsArray.length)
 		{
-			var optionText:Alphabet = new Alphabet(0, 70 * i, optionsArray[i].name, true, 0.8);
+			var optionText:Alphabet = new Alphabet(0, 300, optionsArray[i].name, true, 0.8);
 			optionText.isMenuItem = true;
-			optionText.x += 300;
-			/*optionText.forceX = 300;
-				optionText.yMult = 90; */
-			optionText.xAdd = 120;
+			optionText.itemNode.startingPosition.x = 120;
 			optionText.targetY = i;
 			grpOptions.add(optionText);
 			
@@ -122,7 +119,7 @@ class GameplayChangersSubState extends MusicBeatSubState
 				checkbox.offsetY = -60;
 				checkbox.ID = i;
 				checkboxGroup.add(checkbox);
-				optionText.xAdd += 80;
+				optionText.itemNode.positionOffset.x += 80;
 			}
 			else
 			{
