@@ -410,4 +410,9 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		call(func, [event]);
 		return event;
 	}
+	
+	public function toString():String
+	{
+		return name;
+	}
 }

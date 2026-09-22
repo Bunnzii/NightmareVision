@@ -200,6 +200,11 @@ class ScriptGroup implements IFlxDestroyable
 		return members.length;
 	}
 	
+	public inline function iterator()
+	{
+		return members.iterator();
+	}
+	
 	/**
 	 * Destroys all members
 	 */
