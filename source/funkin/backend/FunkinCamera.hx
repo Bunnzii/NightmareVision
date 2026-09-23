@@ -112,7 +112,7 @@ class FunkinCamera extends extensions.flixel.FlxCameraEx
 	var _cameraMatrix:FlxMatrix;
 	
 	@:nullSafety(Off)
-	public function new(id:String = 'unknown', x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0, zoom:Float = 0)
+	public function new(x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0, zoom:Float = 0, id:String = 'unknown')
 	{
 		super(x, y, width, height, zoom);
 		
