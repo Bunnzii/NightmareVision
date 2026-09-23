@@ -92,11 +92,6 @@ class FunkinCamera extends extensions.flixel.FlxCameraEx
 	static final SHADER_REQUIRED_BLEND_MODES:Array<BlendMode> = [INVERT];
 	
 	/**
-	 * The ID of this camera, used for debugging.
-	 */
-	public var id:String;
-	
-	/**
 	 * If `true` the blend shader will try to blend with the cameras underneath it.
 	 * This is useful for, say, making a strumline note have a shader-only blend mode like `INVERT`.
 	 *
@@ -112,12 +107,10 @@ class FunkinCamera extends extensions.flixel.FlxCameraEx
 	var _cameraMatrix:FlxMatrix;
 	
 	@:nullSafety(Off)
-	public function new(x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0, zoom:Float = 0, id:String = 'unknown')
+	public function new(x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0, zoom:Float = 0)
 	{
 		super(x, y, width, height, zoom);
-		
-		this.id = id;
-		
+				
 		_backgroundFrame = new FlxFrame(new FlxGraphic('', null));
 		_backgroundFrame.frame = new FlxRect();
 		
