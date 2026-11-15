@@ -331,7 +331,8 @@ class Character extends Bopper
 	 */
 	override function dance(forced:Bool = false)
 	{
-		if (debugMode || specialAnim) return;
+		if (debugMode || specialAnim || skipDance) return;
+
 		if (hasAnim(getAnimName() + '-return'))
 		{
 			playAnim(getAnimName() + '-return', true);

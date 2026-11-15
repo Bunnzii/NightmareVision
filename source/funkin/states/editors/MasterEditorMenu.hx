@@ -16,7 +16,7 @@ class MasterEditorMenu extends MusicBeatState
 	var options:Array<String> = [
 		'Chart Editor',
 		'Character Editor',
-		'Note Skin Editor',
+		'WIP Note Skin Editor',
 		'Chart Converter',
 		"Metadata Editor",
 		'Mods Manager',
@@ -133,8 +133,8 @@ class MasterEditorMenu extends MusicBeatState
 					FlxG.switchState(() -> new MenuCharacterEditorState());
 				case 'Chart Editor': // felt it would be cool maybe
 					FlxG.switchState(OLDChartEditorState.new);
-				// case 'Note Skin Editor':
-				// 	FlxG.switchState(() -> new NoteSkinEditor('default'));
+				case 'WIP Note Skin Editor':
+				 	FlxG.switchState(() -> new WIPNoteSkinEditor('default'));
 				case 'Chart Converter':
 					FlxG.switchState(() -> new ChartConverterState());
 				case "New Chart Editor (Unfinished)":

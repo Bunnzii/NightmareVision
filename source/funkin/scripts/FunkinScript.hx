@@ -292,6 +292,7 @@ class FunkinScript extends IrisEx implements IFlxDestroyable
 		set('FoxFunkinSprite', foxlite.funkin.FoxFunkinSprite);
 		set('FoxFPSCamera', foxlite.extras.FoxFPSCamera);
 		set('FoxPanoramaSky', foxlite.sky.FoxPanoramaSky);
+		set('FoxGLTFLoader', foxlite.loaders.FoxGLTFLoader);
 
 		// abstracts
 		set("FlxTextAlign", funkin.utils.MacroUtil.buildAbstract(flixel.text.FlxText.FlxTextAlign));
