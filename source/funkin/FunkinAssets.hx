@@ -2,6 +2,8 @@ package funkin;
 
 import haxe.io.Bytes;
 
+import funkin.backend.DDSLoader;
+
 import openfl.media.Sound;
 import openfl.utils.AssetType;
 import openfl.display.BitmapData;
@@ -117,6 +119,9 @@ class FunkinAssets
 	 */
 	public static function getBitmapData(path:String, useCache:Bool = true):Null<BitmapData>
 	{
+		final dds = DDSLoader.load(path);
+		if (dds != null) return dds;
+	
 		var bitmap:Null<BitmapData> = null;
 		#if (MODS_ALLOWED || ASSET_REDIRECT) if (FileSystem.exists(path)) bitmap = BitmapData.fromFile(path);
 		else #end if (Assets.exists(path, IMAGE)) bitmap = Assets.getBitmapData(path, useCache);
@@ -185,7 +190,7 @@ class FunkinAssets
 		
 		if (bitmap != null)
 		{
-			return cache.cacheBitmap(key, bitmap, allowGPU);
+			return cache.cacheBitmap(key, bitmap, allowGPU && bitmap.readable);
 		}
 		
 		return null;

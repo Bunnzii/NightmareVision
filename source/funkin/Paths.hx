@@ -1,5 +1,7 @@
 package funkin;
 
+import funkin.backend.DDSLoader;
+
 import haxe.io.Path;
 
 import openfl.media.Sound;
@@ -64,13 +66,13 @@ class Paths
 		{
 			final modPath:String = modFolders(file);
 			
-			if (FileSystem.exists(modPath)) return modPath;
+			if (FileSystem.exists(modPath) || DDSLoader.hasSibling(modPath)) return modPath;
 		}
 		#end
 		
 		#if ASSET_REDIRECT
 		final embedPath = getCorePath().replace(CORE_DIRECTORY, trail + 'assets/embeds') + file;
-		if (FunkinAssets.exists(embedPath)) return embedPath;
+		if (FunkinAssets.exists(embedPath) || DDSLoader.hasSibling(embedPath)) return embedPath;
 		#end
 		
 		return getCorePath(file);
