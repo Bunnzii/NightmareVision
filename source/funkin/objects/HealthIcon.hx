@@ -94,9 +94,9 @@ class HealthIcon extends FlxSprite implements IUiSprite
 		this.characterName = char;
 		
 		var name:String = '${Paths.UI_PREFIX}icons/$char';
-		if (!iconExists(name)) name = '${Paths.UI_PREFIX}icons/icon-' + char; // Older versions of psych engine's support
-		if (!iconExists(name)) name = '${Paths.UI_PREFIX}icons/icon-face'; // Prevents crash from missing icon
-		if (!iconExists(name)) name = 'UI/icons/icon-face'; // ultimate fallback incase icon-face doesnt exist in ur custom UI folder
+		if (!Paths.fileExists('images/' + name + '.png')) name = '${Paths.UI_PREFIX}icons/icon-' + char; // Older versions of psych engine's support
+		if (!Paths.fileExists('images/' + name + '.png')) name = '${Paths.UI_PREFIX}icons/icon-face'; // Prevents crash from missing icon
+		if (!Paths.fileExists('images/' + name + '.png')) name = 'UI/icons/icon-face'; // ultimate fallback incase icon-face doesnt exist in ur custom UI folder
 		
 		final graphic = Paths.image(name, null, false);
 		
@@ -142,12 +142,5 @@ class HealthIcon extends FlxSprite implements IUiSprite
 		if (!updateFrames) return;
 		
 		animation.frameIndex = health < 0.2 ? 1 : 0;
-	}
-
-	/**
-	 * So icons can support .dds
-	 */
-	static inline function iconExists(name:String):Bool{
-		return Paths.fileExists('images/$name.png') || Paths.fileExists('images/$name.dds');
 	}
 }
