@@ -521,7 +521,8 @@ class Paths
 		if (Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 		{
 			final fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
-			if (FileSystem.exists(fileToCheck) || DDSLoader.hasSibling(fileToCheck))
+			// trace(fileToCheck);
+			if (FileSystem.exists(fileToCheck))
 			{
 				return fileToCheck;
 			}
@@ -530,7 +531,7 @@ class Paths
 		for (mod in Mods.globalMods)
 		{
 			final fileToCheck:String = mods(mod + '/' + key);
-			if (FileSystem.exists(fileToCheck) || DDSLoader.hasSibling(fileToCheck)) return fileToCheck;
+			if (FileSystem.exists(fileToCheck)) return fileToCheck;
 		}
 		return mods(key);
 	}
