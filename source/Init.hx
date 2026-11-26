@@ -1,7 +1,5 @@
 package;
 
-import funkin.backend.DDSLoader;
-import animate.FlxAnimateAssets;
 import funkin.FunkinAssets;
 
 import flixel.FlxState;
@@ -78,9 +76,6 @@ class Init extends FlxState
 		funkin.backend.plugins.ModPlugin.instance.populate();
 		
 		FunkinAssets.cache.currentTrackedSounds.addPermanentKey('assets/music/freakyMenu.ogg');
-
-		FlxAnimateAssets.exists = (path, type) -> FunkinAssets.exists(path) || DDSLoader.hasSibling(path);
-		FlxAnimateAssets.getBitmapData = (path) -> cast FunkinAssets.getBitmapData(path);
 		
 		super.create();
 		
